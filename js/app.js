@@ -1,9 +1,9 @@
 'use strict';
 
-var LabApp = angular.module('LabApp', ['ui.router']);
+var LabApp = angular.module('LabApp', ['ui.router', 'LocalStorageModule']);
 
 LabApp.config(function($stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/info');
+    $urlRouterProvider.otherwise('/');
     $stateProvider
         .state('info', {
             url: '/info/:category',
@@ -24,6 +24,10 @@ LabApp.config(function($stateProvider, $urlRouterProvider) {
 });
 
 LabApp.constant('ngAuthSettings',{baseUrl: 'http://lab.tekoone.ru/api/?'})
+
+LabApp.run(['authService', function (authService) {
+    authService.fillAuthData();
+}]);
 
 LabApp.directive('modal', function () {
     return {

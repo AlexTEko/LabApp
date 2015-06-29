@@ -56,4 +56,40 @@
                 exit();
             }
         }
+        if ($_GET['do'] == 'login') {
+            $array = json_decode($HTTP_RAW_POST_DATA, true);
+            $login = trim($array['email']);
+            $password = trim($array['password']);
+            if (empty($login) or empty($password)) {
+                $res['status'] = '3';
+                $res['message'] = 'Неверные данные';
+                echo json_encode($res);
+                exit();
+            }
+            $result = $conn->query("SELECT login FROM users WHERE login = '$login' LIMIT 1");
+            if ($result->num_rows == 0) {
+                $res['status'] = '2';
+                $res['message'] = 'Такой пользователь не зарегистрирован';
+                echo json_encode($res);
+                exit();
+            }
+            $password = md5(md5($password) . pass_salt);
+            $result = $conn->query("SELECT login FROM users WHERE login = '$login' AND password = '$password' LIMIT 1");
+            if ($result->num_rows == 0) {
+                $res['status'] = '4';
+                $res['message'] = 'Неверный пароль';
+                echo json_encode($res);
+                exit();
+            }
+            if ($result->num_rows == 1) {
+                $token = md5(md5(time()) . pass_salt);
+                $result = $conn->query("UPDATE users SET date_login = NOW(),token = '$token '  WHERE login = '$login'");
+                $res['status'] = '0';
+                $res['message'] = 'Успешная авторизация';
+                $res['token'] = $token;
+                echo json_encode($res);
+                exit();
+            }
+        }
+
     }

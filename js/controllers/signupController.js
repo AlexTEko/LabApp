@@ -1,6 +1,7 @@
 ﻿'use strict';
-LabApp.controller('signupController', ['$scope','$http','ngAuthSettings','$injector','$timeout', function ($scope,$http,ngAuthSettings,$injector,$timeout) {
+LabApp.controller('signupController', ['$scope', 'authService', 'ngAuthSettings', '$injector', '$timeout', function ($scope, authService, ngAuthSettings, $injector, $timeout) {
     $scope.message = '';
+    $scope.savedSuccessfully = false;
     $scope.registration = {
         email: "",
         password: "",
@@ -8,9 +9,11 @@ LabApp.controller('signupController', ['$scope','$http','ngAuthSettings','$injec
     };
 
     $scope.signUp = function() {
-        $http.post(ngAuthSettings.baseUrl + 'do=register', $scope.registration).success(function(data) {
-            $scope.message = data.message;
-            if (data.status ==  0) {
+        authService.saveRegistration($scope.registration).then(function (responce) {
+            console.log(responce);
+            $scope.message = responce.data.message;
+            if (responce.data.status == 0) {
+                $scope.savedSuccessfully = true;
                 $scope.message = 'Успешная регистрация. Через 5 секунд вы будете автоматически перенаправлены на страницу входа.';
                 startTimer();
             }
