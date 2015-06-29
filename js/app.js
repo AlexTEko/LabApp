@@ -19,8 +19,17 @@ LabApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/register',
             templateUrl: 'partial/partial-register.html',
             controller: 'signupController'
+        })
+        .state('news', {
+            url: '/news/:category',
+            templateUrl: 'partial/partial-news.html',
+            controller: 'newsController'
         });
 
+});
+
+LabApp.config(function ($httpProvider) {
+    $httpProvider.interceptors.push('authInterceptorService');
 });
 
 LabApp.constant('ngAuthSettings',{baseUrl: 'http://lab.tekoone.ru/api/?'})

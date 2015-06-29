@@ -93,3 +93,24 @@
         }
 
     }
+
+if (isset($_GET['news'])) {
+    if ($_GET['news'] == 'private') {
+        if (validateToken()) {
+            echo json_encode('true');
+        } else
+            echo json_encode('false');
+
+    }
+}
+
+function validateToken()
+{
+    global $conn;
+    $token = $_SERVER['HTTP_AUTHORIZATION'];
+    $result = $conn->query("SELECT token FROM users WHERE token = '$token' LIMIT 1");
+    if ($result->num_rows == 1) {
+        return true;
+    }
+    return false;
+}
