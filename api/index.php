@@ -100,10 +100,14 @@ if (isset($_GET['news'])) {
             $token = $_SERVER['HTTP_AUTHORIZATION'];
             $result = $conn->query("SELECT id FROM users WHERE token = '$token'");
             $id = $result->fetch_assoc()['id'];
-            $result = $conn->query("SELECT header,text,common FROM news WHERE common=0 AND user_id=$id");
+            $result = $conn->query("SELECT subs_id FROM subs WHERE user_id=$id");
             $news = [];
-            while ($array = $result->fetch_assoc()) {
-                $news[] = $array;
+            while ($row = $result->fetch_assoc()) {
+                $id = $row['subs_id'];
+                $result2 = $conn->query("SELECT header,text,common FROM news WHERE user_id=$id");
+                while ($array = $result2->fetch_assoc()) {
+                    $news[] = $array;
+                }
             }
             $res['status'] = 0;
             $res['news'] = $news;
