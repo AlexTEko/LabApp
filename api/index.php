@@ -82,7 +82,7 @@
                 exit();
             }
             if ($result->num_rows == 1) {
-                $token = md5(md5(time()) . pass_salt);
+                $token = bin2hex(openssl_random_pseudo_bytes(32));
                 $result = $conn->query("UPDATE users SET date_login = NOW(),token = '$token '  WHERE login = '$login'");
                 $res['status'] = '0';
                 $res['message'] = 'Успешная авторизация';
@@ -97,11 +97,53 @@
 if (isset($_GET['news'])) {
     if ($_GET['news'] == 'private') {
         if (validateToken()) {
-            echo json_encode('true');
+            $token = $_SERVER['HTTP_AUTHORIZATION'];
+            $result = $conn->query("SELECT id FROM users WHERE token = '$token'");
+            $id = $result->fetch_assoc()['id'];
+            $result = $conn->query("SELECT header,text,common FROM news WHERE common=0 AND user_id=$id");
+            $news = [];
+            while ($array = $result->fetch_assoc()) {
+                $news[] = $array;
+            }
+            $res['status'] = 0;
+            $res['news'] = $news;
+            echo json_encode($res);
         } else
             echo json_encode('false');
 
+    } else {
+        $result = $conn->query("SELECT header,text,common FROM news WHERE common=1");
+        $news = [];
+        while ($array = $result->fetch_assoc()) {
+            $news[] = $array;
+        }
+        $res['status'] = 0;
+        $res['news'] = $news;
+        echo json_encode($res);
     }
+}
+
+if (isset($_GET['tasks'])) {
+    if ($_GET['tasks'] == 'actual') {
+        $result = $conn->query("SELECT header,text FROM tasks WHERE actual=1");
+        $tasks = [];
+        while ($array = $result->fetch_assoc()) {
+            $tasks[] = $array;
+        }
+        $res['status'] = 0;
+        $res['tasks'] = $tasks;
+        echo json_encode($res);
+    } else {
+        $result = $conn->query("SELECT header,text FROM tasks");
+        $tasks = [];
+        while ($array = $result->fetch_assoc()) {
+            $tasks[] = $array;
+        }
+        $res['status'] = 0;
+        $res['tasks'] = $tasks;
+        echo json_encode($res);
+    }
+
 }
 
 function validateToken()

@@ -19,8 +19,8 @@
     <nav class="navbar navbar-static-top" ng-controller="indexController">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" href="."><img alt="Brand" src="/assets/img/vt-logo.png"></a>
-                <a class="navbar-brand" href=".">Лаборатория<br> компьютерной алгебры</a>
+                <a class="navbar-brand" href="#/"><img alt="Brand" src="/assets/img/vt-logo.png"></a>
+                <a class="navbar-brand" href="#/">Лаборатория<br> компьютерной алгебры</a>
             </div>
             <div>
                 <ul class="nav navbar-nav">
@@ -44,8 +44,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-stats" aria-hidden="true"></span> Задачи<span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Актуальны</a></li>
-                            <li><a href="#">Все</a></li>
+                            <li><a href="#tasks/actual">Актуальны</a></li>
+                            <li><a href="#tasks/all">Все</a></li>
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -56,7 +56,10 @@
                             <li><a href="#">Программы</a></li>
                         </ul>
                     </li>
-                    <li class="dropdown">
+                    <li ng-hide="authentication.isAuth"><a href="#news/all"> <span class="glyphicon glyphicon-pushpin"
+                                                                                   aria-hidden="true"></span>
+                        Новости</a></li>
+                    <li class="dropdown" ng-show="authentication.isAuth">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                             <span class="glyphicon glyphicon-pushpin" aria-hidden="true"></span> Новости <span class="badge">{{$root.counttasks}}</span><span class="caret"></span></a>
                         <ul class="dropdown-menu">
@@ -99,6 +102,7 @@
     <script src="js/controllers/signupController.js" type="application/javascript"></script>
     <script src="js/controllers/indexController.js" type="application/javascript"></script>
     <script src="js/controllers/newsController.js" type="application/javascript"></script>
+    <script src="js/controllers/tasksController.js" type="application/javascript"></script>
     <script src="js/loading-bar.min.js" type="application/javascript"></script>
 </body>
 </html>

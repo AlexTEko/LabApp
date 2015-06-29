@@ -1,13 +1,13 @@
 'use strict';
-LabApp.controller('newsController', ['$scope', '$stateParams', 'ngAuthSettings', '$http', function ($scope, $stateParams, ngAuthSettings, $http) {
-    $scope.news = [];
+LabApp.controller('tasksController', ['$scope', '$stateParams', 'ngAuthSettings', '$http', function ($scope, $stateParams, ngAuthSettings, $http) {
+    $scope.tasks = [];
 
     if ($stateParams.category) {
-        $http.get(ngAuthSettings.baseUrl + 'news=' + $stateParams.category).
+        $http.get(ngAuthSettings.baseUrl + 'tasks=' + $stateParams.category).
             success(function (data, status, headers, config) {
                 if (data) {
                     if (data.status == 0)
-                        $scope.news = data.news;
+                        $scope.tasks = data.tasks;
                 }
             }).
             error(function (data, status, headers, config) {
