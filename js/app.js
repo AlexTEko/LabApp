@@ -29,6 +29,11 @@ LabApp.config(function($stateProvider, $urlRouterProvider) {
             url: '/tasks/:category',
             templateUrl: 'partial/partial-tasks.html',
             controller: 'tasksController'
+        })
+        .state('admin', {
+            url: '/admin',
+            templateUrl: 'partial/partial-admin.html',
+            controller: 'adminController'
         });
 
 });

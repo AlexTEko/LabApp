@@ -91,6 +91,22 @@
                 exit();
             }
         }
+        if ($_GET['do'] == 'admin') {
+            $token = $_SERVER['HTTP_AUTHORIZATION'];
+            $result = $conn->query("SELECT role FROM users WHERE token = '$token'");
+            $role = $result->fetch_assoc()['role'];
+            if ($role == 3) {
+                $res['status'] = '0';
+                $res['admin'] = '1';
+                echo json_encode($res);
+                exit();
+            } else {
+                $res['status'] = '0';
+                $res['admin'] = '0';
+                echo json_encode($res);
+                exit();
+            }
+        }
 
     }
 
@@ -113,7 +129,7 @@ if (isset($_GET['news'])) {
             $res['news'] = $news;
             echo json_encode($res);
         } else
-            echo json_encode('false');
+            echo json_encode('Access denied');
 
     } else {
         $result = $conn->query("SELECT header,text,common FROM news WHERE common=1");
@@ -149,6 +165,7 @@ if (isset($_GET['tasks'])) {
     }
 
 }
+
 
 function validateToken()
 {
